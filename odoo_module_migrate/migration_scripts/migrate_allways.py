@@ -36,6 +36,8 @@ def set_module_installable(**kwargs):
 
 
 def remove_migration_folder(**kwargs):
+    # TODO make optional
+    return
     logger = kwargs['logger']
     module_path = kwargs['module_path']
     migration_path_folder = os.path.join(module_path, 'migrations')
