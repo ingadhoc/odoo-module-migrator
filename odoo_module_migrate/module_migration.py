@@ -42,6 +42,7 @@ class ModuleMigration():
         text_replaces = getattr(migration_script, "_TEXT_REPLACES", {})
         text_errors = getattr(migration_script, "_TEXT_ERRORS", {})
         global_functions = getattr(migration_script, "_GLOBAL_FUNCTIONS", {})
+        version_functions = getattr(migration_script, "_VERSION_FUNCTIONS", {})
         deprecated_modules = getattr(
             migration_script, "_DEPRECATED_MODULES", {})
 
@@ -81,6 +82,19 @@ class ModuleMigration():
                 for pattern, error_message in errors.items():
                     if re.findall(pattern, new_text):
                         logger.error(error_message)
+
+                # version_functions
+                if version_functions:
+                    for function in version_functions:
+                        function(
+                            logger=logger,
+                            module_path=self._module_path,
+                            module_name=self._module_name,
+                            manifest_path=self._get_manifest_path(),
+                            migration_steps=self._migration._migration_steps,
+                            tools=tools,
+                            content=tools._read_content(absolute_file_path),
+                        )
 
         # Handle deprecated modules
         current_manifest_text = tools._read_content(self._get_manifest_path())
