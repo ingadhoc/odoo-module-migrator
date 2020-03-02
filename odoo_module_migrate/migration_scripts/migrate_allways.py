@@ -19,8 +19,8 @@ def bump_revision(**kwargs):
 
     new_version = "%s.1.0.0" % target_version_name
 
-    old_term = r"('|\")version('|\").*('|\").*('|\")"
-    new_term = r'\1version\2: "{0}"'.format(new_version)
+    old_term = r"(.version..\s*['\"]).*(['\"])"
+    new_term = r"\g<1>{0}\g<2>".format(new_version)
     tools._replace_in_file(
         manifest_path, {old_term: new_term},
         "Bump version to %s" % new_version)
